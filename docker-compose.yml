@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: CompanyDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres-db
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_LOG_LEVEL: "Verbose"
+    ports:
+      - "5341:5341"
+      - "80:80"
+    volumes:
+      - seq_data:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: company-api
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__npgsql: "Host=postgres-db;Port=5432;Database=CompanyDB;Username=postgres;Password=123456"
+      Serilog__WriteTo__0__Args__serverUrl: "http://seq:5341"
+    ports:
+      - "5104:8080"
+      - "7194:8081"
+    depends_on:
+      - postgres-db
+      - seq
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  seq_data:
