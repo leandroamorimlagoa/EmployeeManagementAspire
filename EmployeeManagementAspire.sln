@@ -50,7 +50,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Models", "src\A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1EA57A5B-7854-40AE-B408-F7D71360CC9E}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 		docker-compose.yml = docker-compose.yml
 		README.md = README.md
 	EndProjectSection
