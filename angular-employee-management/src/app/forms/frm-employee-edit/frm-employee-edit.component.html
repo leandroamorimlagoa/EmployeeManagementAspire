@@ -1,0 +1,119 @@
+<div class="container mt-4">
+  <h2>{{ isEditMode ? 'Editar Funcionário' : 'Novo Funcionário' }}</h2>
+
+  <form #employeeForm="ngForm" (ngSubmit)="saveEmployee()" novalidate>
+
+    <!-- E-mail -->
+    <div class="mb-3">
+      <label for="email" class="form-label">E-mail</label>
+      <input type="email" id="email" class="form-control" [(ngModel)]="employee.email" name="email" required>
+      <div *ngIf="employeeForm.submitted && !employee.email" class="text-danger">
+        O e-mail é obrigatório.
+      </div>
+    </div>
+
+    <!-- Nome e Sobrenome -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="firstName" class="form-label">Nome</label>
+        <input type="text" id="firstName" class="form-control" [(ngModel)]="employee.firstName" name="firstName"
+          required>
+        <div *ngIf="employeeForm.submitted && !employee.firstName" class="text-danger">
+          O nome é obrigatório.
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="lastName" class="form-label">Sobrenome</label>
+        <input type="text" id="lastName" class="form-control" [(ngModel)]="employee.lastName" name="lastName" required>
+        <div *ngIf="employeeForm.submitted && !employee.lastName" class="text-danger">
+          O sobrenome é obrigatório.
+        </div>
+      </div>
+    </div>
+
+    <!-- Documento -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="docNumber" class="form-label">Número do Documento</label>
+        <input type="text" id="docNumber" class="form-control" [(ngModel)]="employee.docNumber" name="docNumber"
+          required>
+        <div *ngIf="employeeForm.submitted && !employee.docNumber" class="text-danger">
+          O número do documento é obrigatório.
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="docType" class="form-label">Tipo de Documento</label>
+        <select id="docType" class="form-select" [(ngModel)]="employee.docType" name="docType" required>
+          <option *ngFor="let type of docTypes" [value]="type.id">{{ type.name }}</option>
+        </select>
+        <div *ngIf="employeeForm.submitted && !employee.docType" class="text-danger">
+          O tipo de documento é obrigatório.
+        </div>
+      </div>
+    </div>
+
+    <!-- Telefones -->
+    <div class="mb-3">
+      <label class="form-label">Telefones</label>
+      <div *ngFor="let phone of employee.phones; let i = index" class="input-group mb-2">
+        <input type="text" class="form-control" placeholder="Número do Telefone" [(ngModel)]="phone.phoneNumber"
+          name="phoneNumber{{i}}" required>
+        <button type="button" class="btn btn-danger" (click)="removePhone(i)">Remover</button>
+      </div>
+      <button type="button" class="btn btn-secondary btn-sm" (click)="addPhone()">Adicionar Telefone</button>
+    </div>
+
+    <div class="row">
+      <!-- Data de Nascimento -->
+      <div class="col-md-6 mb-3">
+        <label for="birthDate" class="form-label">Data de Nascimento</label>
+        <input type="date" id="birthDate" class="form-control" [(ngModel)]="employee.birthDate" name="birthDate"
+          required>
+        <div *ngIf="employeeForm.submitted && !employee.birthDate" class="text-danger">
+          A data de nascimento é obrigatória.
+        </div>
+      </div>
+      <!-- Gerente - drop -->
+      <div class="col-md-6 mb-3">
+        <label for="docType" class="form-label">Gerente</label>
+        <select id="docType" class="form-select" [(ngModel)]="employee.managerId" name="managerId" required>
+          <option *ngFor="let manager of managerList" [value]="manager.id">{{ manager.firstName }} {{ manager.lastName
+            }}</option>
+        </select>
+        <div *ngIf="employeeForm.submitted && !employee.managerId" class="text-danger">
+          O tipo de documento é obrigatório.
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Cargo (Role) -->
+      <div class="col-md-6 mb-3">
+        <label for="role" class="form-label">Cargo</label>
+        <select id="role" class="form-select" [(ngModel)]="employee.role" name="role" required>
+          <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+        </select>
+        <div *ngIf="employeeForm.submitted && !employee.role" class="text-danger">
+          O cargo é obrigatório.
+        </div>
+      </div>
+
+      <!-- Senha -->
+      <div class="col-md-6 mb-3">
+        <label for="password" class="form-label">Senha</label>
+        <input type="password" id="password" class="form-control" [(ngModel)]="employee.password" name="password"
+          required>
+        <div *ngIf="employeeForm.submitted && !employee.password" class="text-danger">
+          A senha é obrigatória.
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="d-flex justify-content-end gap-2">
+      <a type="button" class="btn btn-secondary" href="/employees">Cancelar</a>
+      <button type="submit" class="btn btn-primary" [disabled]="!employeeForm.valid">Salvar</button>
+    </div>
+
+  </form>
+</div>
